@@ -114,7 +114,7 @@ module.exports.changePass = async ({ body, query }) => {
     }
     const salt = await genSalt();
     const hashedPassword = await hash(password, salt);
-    const updateUserQuery = `UPDATE users SET (password) VALUES("${hashedPassword}") WHERE id=${userData.id}`;
+    const updateUserQuery = `UPDATE users SET password="${hashedPassword}" WHERE id=${userData.id}`;
     const updateUser = await executeQuery(updateUserQuery);
     return updateUser;
   } catch (error) {
