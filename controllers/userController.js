@@ -121,3 +121,29 @@ module.exports.changePass = async ({ body, query }) => {
     return error;
   }
 };
+
+
+module.exports.getUserData = async({isAuth,userId}) => {
+  try {
+    if(!isAuth) {
+      throw new Error("Please Login");
+    }
+    const getUserQuery = "SELECT * FROM users WHERE id="+userId;
+    const userData = await executeQuery(getUserQuery);
+    const {address} = userData[0];
+    const parsedAddress = JSON.parse(address).slice(0,5);
+    const getAddressPromise = parsedAddress.map(e => {
+      const getAddrQuery = "SELECT * FROM address WHERE id="+e;
+      return executeQuery(getAddrQuery);
+      //return axios.get(http://localhost:4000/orders/5)
+    })
+    //  console.log(fetch("https://randomuser.me/api/"))
+    const addressData = await Promise.allSettled(getAddressPromise);
+    return {
+      ...userData[0],
+      address: addressData
+    }
+  } catch (error) {
+    return error;
+  }
+}
