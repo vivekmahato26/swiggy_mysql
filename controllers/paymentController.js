@@ -27,12 +27,10 @@ module.exports.checkoutSession = async () => {
 
 module.exports.paymentIntent = async ({body}) => {
     try {
-        console.log(body);
-
         const paymentIntent = await stripe.paymentIntents.create({
             amount: body.amount,
             currency: 'inr',
-            // automatic_payment_methods: {enabled: true},
+            automatic_payment_methods: {enabled: true},
         });
         return paymentIntent;
     } catch (error) {

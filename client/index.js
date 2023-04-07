@@ -22,10 +22,8 @@ const createPayment = async () => {
       clientSecret: client_secret,
     };
 
-    // Set up Stripe.js and Elements to use in checkout form, passing the client secret obtained in step 3
     const elements = stripe.elements(options);
 
-    // Create and mount the Payment Element
     const paymentElement = elements.create("payment");
     paymentElement.mount("#payment-element");
 
@@ -35,23 +33,15 @@ const createPayment = async () => {
       event.preventDefault();
 
       const { error } = await stripe.confirmPayment({
-        //`Elements` instance that was used to create the Payment Element
         elements,
         confirmParams: {
-          return_url: "http://loclhost:4000/success",
+          return_url: "http://localhost:4000/success",
         },
       });
 
       if (error) {
-        // This point will only be reached if there is an immediate error when
-        // confirming the payment. Show error to your customer (for example, payment
-        // details incomplete)
         const messageContainer = document.querySelector("#error-message");
         messageContainer.textContent = error.message;
-      } else {
-        // Your customer will be redirected to your `return_url`. For some payment
-        // methods like iDEAL, your customer will be redirected to an intermediate
-        // site first to authorize the payment, then redirected to the `return_url`.
       }
     });
   } catch (error) {

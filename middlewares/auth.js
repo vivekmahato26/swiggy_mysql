@@ -31,7 +31,7 @@ module.exports = (req, res, next) => {
     // req.email = verifyToken.email
     // return next()
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     req.isAuth = false;
     return next();
   }
